@@ -3,8 +3,9 @@
 import pygame
 
 
-def get_word(letters, spaces):
-    letterCap = 10
+def get_word():
+    letterCap = 20
+    
     word = input("What is your chosen word?\n").upper() #gets word, converts all to uppercase
     
     try:#checks if all characters are letters, and if fits letter cap
@@ -14,23 +15,24 @@ def get_word(letters, spaces):
         if len(word) > letterCap:
             raise ValueError("Max letter cap of 10 reached.")
             
+        letters = list(word)
+        spaces = []
+        
+        for i in range(len(letters)):
+            spaces.append('_')
+        
+        #test
+        print(letters)
+        print(spaces)
+        #test
+    
     except ValueError as e:
         print("Error:", e)
-
-    letters = list(word)
-    
-    spaces = []
-    for i in range(len(letters)):
-        spaces.append('_')
-    
-    print(letters)
-    print(spaces)
-
-    
+        
     return letters, spaces
     
     
-def check_letter(letters):
+def check_letter(letters, spaces, wrongs):
     guess = input("Enter a letter to guess. \n").upper()
     
     try: #checks if inputted exactly 1 letter to guess
@@ -43,18 +45,35 @@ def check_letter(letters):
     except ValueError as e:
         print("Error:", e)
     
-    if guess in letters:
-        #correct guess
-        print("Correct guess!!")
+    correctGuess = False
+    for i in range(len(letters)): #change all correctly guessed letters
+        if letters[i] == guess:
+            spaces[i] = guess
+            correctGuess = True
+    
+    if correctGuess:
+        print("Correct guess!!!")
+    
+    if not correctGuess:
+        print("Incorrect guess...")
+        wrongs.append(guess) #append guess to 'wrongs' array
         
-    else:
-        #wrong guess
-        print("Incorrect guess")
+    print(letters)
+    print(spaces)
+    print(wrongs)
+    
+    return letters, spaces, wrongs
         
-       
-testletters = 0
-testspaces = 0
-get_word(testletters, testspaces)
+
+#testing
+testletters, testspaces = get_word()
+testwrongs = []
+check_letter(testletters, testspaces, testwrongs)
+#testing
+
+
+
+
 # draws the hangman based on number of wrong guesses (0-6)
 def drawHangman(screen, wrong_guesses):
     # constants for positioning
