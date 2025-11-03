@@ -6,9 +6,15 @@ import pygame
 def get_word():
     letterCap = 20
     
+    validWord = False
+    
     word = input("What is your chosen word?\n").upper() #gets word, converts all to uppercase
     
     try:#checks if all characters are letters, and if fits letter cap
+        
+        if len(word) < 1:
+             raise ValueError("No word entered.")
+        
         if not word.isalpha(): 
             raise ValueError("Invalid Word. No special characters, spaces or numbers.")
         
@@ -20,6 +26,8 @@ def get_word():
         
         for i in range(len(letters)):
             spaces.append('_')
+            
+        validWord = True
         
         #testings
         # print(letters)
@@ -28,7 +36,7 @@ def get_word():
     except ValueError as e:
         print("Error:", e)
         
-    return letters, spaces
+    return letters, spaces, validWord
     
     
 def check_letter(letters, spaces, wrongs):
