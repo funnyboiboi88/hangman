@@ -1,19 +1,23 @@
 #recieve input of word to be used
 #prompt user for letter, check letter and respond appropriately
 import pygame
+import pygame_gui
 
 
-def get_word():
+
+def get_word(word):
     letterCap = 20
+    letters = []
+    spaces = []
     
     validWord = False
     
-    word = input("What is your chosen word?\n").upper() #gets word, converts all to uppercase
+    word = word.upper() #gets word, converts all to uppercase
     
     try:#checks if all characters are letters, and if fits letter cap
         
         if len(word) < 1:
-             raise ValueError("No word entered.")
+            raise ValueError("No word entered.")
         
         if not word.isalpha(): 
             raise ValueError("Invalid Word. No special characters, spaces or numbers.")
@@ -41,6 +45,8 @@ def get_word():
     
 def check_letter(letters, spaces, wrongs):
     guess = input("Enter a letter to guess. \n").upper()
+    wrongs = []
+    
     
     try: #checks if inputted exactly 1 letter to guess
         if len(guess) > 1:
@@ -49,21 +55,22 @@ def check_letter(letters, spaces, wrongs):
         elif len(guess) < 1:
             raise ValueError("Guess a letter")
     
+        correctGuess = False
+        for i in range(len(letters)): #change all correctly guessed letters
+            if letters[i] == guess:
+                spaces[i] = guess
+                correctGuess = True
+        
+        if correctGuess:
+            print("Correct guess!!!")
+        
+        if not correctGuess:
+            print("Incorrect guess...")
+            wrongs.append(guess) #append guess to 'wrongs' array
+            
     except ValueError as e:
         print("Error:", e)
     
-    correctGuess = False
-    for i in range(len(letters)): #change all correctly guessed letters
-        if letters[i] == guess:
-            spaces[i] = guess
-            correctGuess = True
-    
-    if correctGuess:
-        print("Correct guess!!!")
-    
-    if not correctGuess:
-        print("Incorrect guess...")
-        wrongs.append(guess) #append guess to 'wrongs' array
         
         
     #checks if games still running
@@ -96,14 +103,14 @@ def check_letter(letters, spaces, wrongs):
 
 
 # draws the hangman based on number of wrong guesses (0-6)
-def drawHangman(screen, wrong_guesses):
+def draw_hangman(screen, wrong_guesses):
     # constants for positioning
     base_x = 200
     base_y = 400
     pole_height = 250
     
     # draw hanger
-    pygame.draw.line(screen, (0,0,0), (base_x, base_y), (base_x + 150, base_y), 10)  # base
+    pygame.draw.line(screen, (255,0,0), (base_x, base_y), (base_x + 150, base_y), 10)  # base
     pygame.draw.line(screen, (0,0,0), (base_x + 50, base_y), (base_x + 50, base_y - pole_height), 10)  # vertical pole
     pygame.draw.line(screen, (0,0,0), (base_x + 50, base_y - pole_height), (base_x + 150, base_y - pole_height), 10)  # horizontal beam
     pygame.draw.line(screen, (0,0,0), (base_x + 150, base_y - pole_height), (base_x + 150, base_y - pole_height + 50), 10)  # rope
@@ -138,3 +145,8 @@ def drawHangman(screen, wrong_guesses):
         pygame.draw.line(screen, (0,0,0),
                         body_end,
                         (base_x + 180, base_y - pole_height + 200), 3)
+        
+def display_word(screen,text, color, center,font):
+        surf = font.render(text, True, color)
+        rect = surf.get_rect(center=center)
+        screen.blit(surf, rect)
