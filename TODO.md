@@ -1,12 +1,12 @@
 [X] making display
-[] showing of words
-[] ability to type out answer
+[X] showing of words
+[X] ability to type out answer
 
 
 [] use a list of words?
-    [] get word, 
-    [] split to letters
-    [] display
+    [X] get word, 
+    [X] split to letters
+    [X] display
 
 [] display of used letters
     
