@@ -2,12 +2,13 @@
 #prompt user for letter, check letter and respond appropriately
 import pygame
 
-def get_word():
+
+def get_word(letters, spaces):
     letterCap = 10
-    try:
-        word = input("What is your chosen word").upper()
-        
-        if not word.isalpha():
+    word = input("What is your chosen word?\n").upper() #gets word, converts all to uppercase
+    
+    try:#checks if all characters are letters, and if fits letter cap
+        if not word.isalpha(): 
             raise ValueError("Invalid Word. No special characters, spaces or numbers.")
         
         if len(word) > letterCap:
@@ -15,8 +16,45 @@ def get_word():
             
     except ValueError as e:
         print("Error:", e)
-        
+
+    letters = list(word)
     
+    spaces = []
+    for i in range(len(letters)):
+        spaces.append('_')
+    
+    print(letters)
+    print(spaces)
+
+    
+    return letters, spaces
+    
+    
+def check_letter(letters):
+    guess = input("Enter a letter to guess. \n").upper()
+    
+    try: #checks if inputted exactly 1 letter to guess
+        if len(guess) > 1:
+            raise ValueError("Only guess one letter at a time")
+        
+        elif len(guess) < 1:
+            raise ValueError("Guess a letter")
+    
+    except ValueError as e:
+        print("Error:", e)
+    
+    if guess in letters:
+        #correct guess
+        print("Correct guess!!")
+        
+    else:
+        #wrong guess
+        print("Incorrect guess")
+        
+       
+testletters = 0
+testspaces = 0
+get_word(testletters, testspaces)
 # draws the hangman based on number of wrong guesses (0-6)
 def drawHangman(screen, wrong_guesses):
     # constants for positioning
