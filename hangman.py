@@ -1,5 +1,6 @@
 import pygame
 import pygame_gui
+import functions
 
 pygame.init()
 screen = pygame.display.set_mode((1000,1000))
@@ -24,8 +25,6 @@ hello_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((150, 800)
 
 
 
-
-
 while running:
     time_delta = clock.tick(60) / 1000.0 # seconds since last frame
     
@@ -41,6 +40,7 @@ while running:
                 text_surf = font.render(word, True, (0,0,0))
                 text_rect = text_surf.get_rect(center=(500, 80))
                 screen.blit(text_surf, text_rect)
+                functions.drawHangman(screen, 3)  
                 
     manager.update(time_delta)   
 
