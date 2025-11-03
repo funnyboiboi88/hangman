@@ -21,10 +21,9 @@ def get_word():
         for i in range(len(letters)):
             spaces.append('_')
         
-        #test
-        print(letters)
-        print(spaces)
-        #test
+        #testings
+        # print(letters)
+        # print(spaces)
     
     except ValueError as e:
         print("Error:", e)
@@ -58,17 +57,31 @@ def check_letter(letters, spaces, wrongs):
         print("Incorrect guess...")
         wrongs.append(guess) #append guess to 'wrongs' array
         
-    print(letters)
-    print(spaces)
-    print(wrongs)
+        
+    #checks if games still running
+    gameRunning = False
+    for i in range(len(letters)):
+        if spaces[i] == '_':
+            gameRunning = True
+        
+    #testings    
+    # print(letters)
+    # print(spaces)
+    # print(wrongs)
     
-    return letters, spaces, wrongs
+    return letters, spaces, wrongs, gameRunning
         
 
 #testing
-testletters, testspaces = get_word()
-testwrongs = []
-check_letter(testletters, testspaces, testwrongs)
+# testletters, testspaces = get_word()
+# testwrongs = []
+# testletters, testspaces, testwrongs, testgameRunning = check_letter(testletters, testspaces, testwrongs)
+
+# if testgameRunning == True:
+#     print("game is running")
+    
+# elif testgameRunning == False:
+#     print("game is NOT running")
 #testing
 
 
