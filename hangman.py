@@ -6,29 +6,35 @@ import functions
 pygame.init()
 screen = pygame.display.set_mode((1000,1000))
 clock = pygame.time.Clock()
-running =  True
-game_stage = 0
 screen.fill((255,255,255)) 
 pygame.display.set_caption('Hangman Game')
 manager = pygame_gui.UIManager((1000, 1000), theme_path='theme.json')
-chosen_word = ''
 
+running =  True
+game_stage = 0
+chosen_word = ''
+hangman_stage = 0
+chosen_letter = ''
 letters = []
 spaces = []
 wrongs = []
+game_running = True
 
 # initialise font and word
 font = pygame.font.Font(None, 48)  # None = default font, 48 = size
 word = "HANG MAN GAME"
 
 start_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((425, 450), (150, 50)),text='Gay-meh Starto',manager=manager)
-word_chooser_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((420, 550), (150, 50)),text = 'Submit Word', manager=manager) 
+word_chooser_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((425, 550), (150, 50)),text = 'Submit Word', manager=manager) 
 word_chooser_button.hide()   
-
+letter_chooser_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((600, 475), (150, 50)),text = 'Submit Letter', manager=manager)
+letter_chooser_button.hide()
 
 while running:
     time_delta = clock.tick(60) / 1000.0 # seconds since last frame
     screen.fill((255,255,255))  #frame clearer
+    
+    functions.display_word(screen, 'game stage: ' + str(game_stage) + '\nhangmanstage: '+str(hangman_stage), (0,0,0), (200, 900),font)
 
         
     for event in pygame.event.get():
@@ -46,6 +52,10 @@ while running:
                 if valid_word:
                     word_chooser_button.hide()
                     game_stage = 2  
+            if event.ui_element == letter_chooser_button:
+                # letters, spaces, wrongs, choose_letter = functions.check_letter(letters, spaces, wrongs, chosen_letter)
+                letters, spaces, wrongs, game_running = functions.check_letter(letters, spaces, wrongs, chosen_letter)
+                chosen_letter = ''  # reset chosen letter after submission
                 
         if event.type == pygame.KEYDOWN:
             if game_stage == 1:
@@ -55,6 +65,14 @@ while running:
                     ch = event.unicode  
                     if ch and ch.isalpha():   # only letters 
                         chosen_word += ch.upper()
+                        
+            if game_stage == 2:
+                if event.key == pygame.K_BACKSPACE:
+                    chosen_letter = chosen_letter[:-1]
+                else:
+                    ch = event.unicode  
+                    if ch and ch.isalpha() and len(chosen_letter)<1:   # only letters 
+                        chosen_letter += ch.upper()
 
 
 
@@ -70,8 +88,16 @@ while running:
     elif game_stage == 2:
         pygame.draw.rect(screen, (0,0,0), (100, 100, 800, 600), 10)
         functions.display_word(screen, word, (0,0,0), (500, 80),font)
-        functions.draw_hangman(screen, 0)  # example: draw hangman with 2 wrong guesses
+        functions.draw_hangman(screen, hangman_stage)  
         functions.display_word(screen, '      '.join(spaces), (0,0,0), (500, 600),font)
+        functions.display_word(screen, 'Guess a Letter!!', (0,0,0), (500, 400),font)
+        functions.display_word(screen, chosen_letter, (0,0,0), (500, 500),font)
+        letter_chooser_button.show()
+        functions.display_word(screen, 'Wrong Letters:' +' '.join(wrongs), (0,0,0), (500, 750),font)
+        
+        if game_running == False and hangman_stage < 6:
+            functions.display_word(screen, 'Congrats !! You Won' , (255,0,0), (500, 200),font)
+        
 
     manager.draw_ui(screen)        # draw GUI elements (buttons, etc.)
     manager.update(time_delta)   

@@ -43,9 +43,9 @@ def get_word(word):
     return letters, spaces, validWord
     
     
-def check_letter(letters, spaces, wrongs):
-    guess = input("Enter a letter to guess. \n").upper()
-    wrongs = []
+def check_letter(letters, spaces, wrongs, guess):
+    # guess = input("Enter a letter to guess. \n").upper()
+    # wrongs = []
     
     
     try: #checks if inputted exactly 1 letter to guess
