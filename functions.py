@@ -65,26 +65,28 @@ def check_letter(letters, spaces, wrongs, guess):
             print("Correct guess!!!")
         
         if not correctGuess:
-            print("Incorrect guess...")
-            wrongs.append(guess) #append guess to 'wrongs' array
+            if guess in wrongs:
+                print("You have already guessed that letter incorrectly.")
+            else:
+                print("Incorrect guess...")
+                wrongs.append(guess) #append guess to 'wrongs' array
             
     except ValueError as e:
         print("Error:", e)
     
         
         
-    #checks if games still running
-    gameRunning = False
+    #checks if game has been won
+    game_won = True
     for i in range(len(letters)):
         if spaces[i] == '_':
-            gameRunning = True
+            game_won = False
         
     #testings    
     # print(letters)
     # print(spaces)
-    # print(wrongs)
     
-    return letters, spaces, wrongs, gameRunning
+    return letters, spaces, wrongs, game_won
         
 
 #testing
